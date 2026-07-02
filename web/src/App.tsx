@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { useMarketStream } from './hooks/useMarketStream';
 import { CoinTable } from './components/CoinTable';
 import { FreshnessBadge } from './components/FreshnessBadge';
+import { HistoryPanel } from './components/HistoryPanel';
 
 export function App() {
   const { snapshot, status, receivedAt } = useMarketStream();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   return (
     <div className="app">
@@ -49,7 +52,18 @@ export function App() {
         </div>
       );
     }
-    return <CoinTable coins={snapshot.data} selectedId={null} onSelect={() => {}} />;
+    return (
+      <>
+        <CoinTable
+          coins={snapshot.data}
+          selectedId={selectedId}
+          onSelect={(id) => setSelectedId(id === selectedId ? null : id)}
+        />
+        {selectedId && (
+          <HistoryPanel coinId={selectedId} onClose={() => setSelectedId(null)} />
+        )}
+      </>
+    );
   }
 }
 
