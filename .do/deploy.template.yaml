@@ -1,0 +1,62 @@
+# DigitalOcean App Platform spec — powers the "Deploy to DigitalOcean" button.
+#
+# One click in the browser (no CLI install) stands up three managed components:
+#   • a dev PostgreSQL database
+#   • the Fastify API   (built from server/Dockerfile), routed at /api and /health
+#   • the React build    (static site),                 routed at /
+#
+# App Platform's ingress does the path routing, so the browser hits ONE URL and
+# /api/* is proxied to the API while everything else serves the SPA — the same
+# same-origin contract the app uses locally. The API runs its idempotent
+# migrations on boot, so the database needs no manual setup.
+spec:
+  name: kin-crypto-dashboard
+  region: nyc
+  features:
+    - buildpack-stack=ubuntu-22
+
+  databases:
+    - name: db
+      engine: PG
+      version: "16"
+      # Dev database — cheapest tier, fine for a demo. Destroy the app when done.
+      production: false
+
+  services:
+    - name: api
+      dockerfile_path: server/Dockerfile
+      source_dir: /
+      http_port: 3001
+      instance_size_slug: basic-xxs
+      instance_count: 1
+      routes:
+        - path: /api
+        - path: /health
+      envs:
+        - key: DATABASE_URL
+          scope: RUN_TIME
+          value: ${db.DATABASE_URL}
+        - key: PORT
+          scope: RUN_TIME
+          value: "3001"
+        - key: REFRESH_INTERVAL_MS
+          scope: RUN_TIME
+          value: "20000"
+      health_check:
+        http_path: /health
+
+  static_sites:
+    - name: web
+      source_dir: /
+      # Build the shared types first, then the Vite app. Node 20+ is provided by
+      # the buildpack; set NODE_VERSION below if a specific version is needed.
+      build_command: npm ci && npm run build -w @kin/types && npm run build -w @kin/web
+      output_dir: web/dist
+      # SPA fallback: unknown paths render the app shell.
+      catchall_document: index.html
+      routes:
+        - path: /
+      envs:
+        - key: NODE_VERSION
+          scope: BUILD_TIME
+          value: "22"

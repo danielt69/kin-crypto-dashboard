@@ -13,6 +13,15 @@ loop on the server does, no matter how many clients are connected.
 > URL, see **[DEPLOY.md](./DEPLOY.md)** (DigitalOcean + Docker). Design rationale is in
 > **[DECISIONS.md](./DECISIONS.md)**.
 
+### Deploy it live — one click, no install
+
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/danielt69/kin-crypto-dashboard/tree/main)
+
+Opens DigitalOcean App Platform in the browser and provisions a managed Postgres + the
+API + the web build from [`.do/deploy.template.yaml`](./.do/deploy.template.yaml) — no CLI,
+no local Docker. (Requires a DigitalOcean login and this repo to be public. App Platform is
+a managed runtime, distinct from the `docker compose` path in SETUP.md.)
+
 ## Architecture
 
 ```
