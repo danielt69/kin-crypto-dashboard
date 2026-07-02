@@ -9,19 +9,9 @@ The design goal: **upstream cost is O(1) in users, and the app degrades to
 "stale but up", never "down".** The browser never talks to CoinGecko — one background
 loop on the server does, no matter how many clients are connected.
 
-> **Just want to run it?** See **[SETUP.md](./SETUP.md)** — one command, no API key, plus
-> how to demo the graceful-degradation behaviour. To run it on a cloud host with a live
-> URL, see **[DEPLOY.md](./DEPLOY.md)** (DigitalOcean + Docker). Design rationale is in
+> **Just want to run it?** See **[SETUP.md](./SETUP.md)** — one command (`docker compose up`),
+> no API key, plus how to demo the graceful-degradation behaviour. Design rationale is in
 > **[DECISIONS.md](./DECISIONS.md)**.
-
-### Deploy it live — one click, no install
-
-[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/danielt69/kin-crypto-dashboard/tree/main)
-
-Opens DigitalOcean App Platform in the browser and provisions a managed Postgres + the
-API + the web build from [`.do/deploy.template.yaml`](./.do/deploy.template.yaml) — no CLI,
-no local Docker. (Requires a DigitalOcean login and this repo to be public. App Platform is
-a managed runtime, distinct from the `docker compose` path in SETUP.md.)
 
 ## Architecture
 
