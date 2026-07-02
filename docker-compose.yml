@@ -1,0 +1,44 @@
+# Three services: Postgres, the Fastify API, and the static web frontend.
+# `docker compose up` is the only command needed; config is env-driven
+# (see .env.example — compose falls back to the same defaults used there).
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-kin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kin}
+      POSTGRES_DB: ${POSTGRES_DB:-kin_crypto}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kin} -d ${POSTGRES_DB:-kin_crypto}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kin}:${POSTGRES_PASSWORD:-kin}@db:5432/${POSTGRES_DB:-kin_crypto}
+      PORT: 3001
+      REFRESH_INTERVAL_MS: ${REFRESH_INTERVAL_MS:-20000}
+    ports:
+      - "${API_PORT:-3001}:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

@@ -1,0 +1,12 @@
+{
+  "name": "@kin/types",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared API contract types between server and web. Single source of truth for the wire format.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}
