@@ -8,6 +8,11 @@ The design goal: **upstream cost is O(1) in users, and the app degrades to
 "stale but up", never "down".** The browser never talks to CoinGecko — one background
 loop on the server does, no matter how many clients are connected.
 
+> **Just want to run it?** See **[SETUP.md](./SETUP.md)** — one command, no API key, plus
+> how to demo the graceful-degradation behaviour. To run it on a cloud host with a live
+> URL, see **[DEPLOY.md](./DEPLOY.md)** (DigitalOcean + Docker). Design rationale is in
+> **[DECISIONS.md](./DECISIONS.md)**.
+
 ## Architecture
 
 ```
