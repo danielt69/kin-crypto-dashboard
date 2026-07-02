@@ -10,6 +10,25 @@ Cost: a `s-1vcpu-1gb` droplet is ~$6/month — **destroy it after the interview*
 
 ---
 
+## Option 0 — One command (`doctl` script)
+
+If you have the DigitalOcean CLI, this is genuinely one command. It creates the droplet,
+injects the cloud-init below, waits for the build, and prints the live URL.
+
+```bash
+# one-time: brew install doctl && doctl auth init  (paste a DO API token)
+./scripts/deploy-do.sh up          # → prints http://<DROPLET_IP> when healthy
+./scripts/deploy-do.sh destroy     # tear it down, stops billing
+```
+
+To test **before the repo is public**, export a GitHub token first:
+`GITHUB_TOKEN=ghp_xxx ./scripts/deploy-do.sh up`. Config knobs (region, size, name) are
+documented at the top of `scripts/deploy-do.sh`.
+
+The rest of this file is the manual console equivalent.
+
+---
+
 ## Option A — One-shot with cloud-init (recommended)
 
 DigitalOcean can run a provisioning script on first boot. You paste this once and the
