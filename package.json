@@ -1,6 +1,7 @@
 {
   "name": "kin-crypto-dashboard",
   "private": true,
+  "type": "module",
   "version": "1.0.0",
   "description": "Real-time crypto market dashboard: React + Fastify + Postgres, fed by a single shared CoinGecko refresh loop.",
   "workspaces": [
