@@ -1,0 +1,135 @@
+/* Minimal hand-rolled styles — no UI framework needed at this scope. */
+
+:root {
+  --bg: #0e1116;
+  --surface: #161b22;
+  --border: #2a313c;
+  --text: #e6e9ef;
+  --text-dim: #8b95a5;
+  --green: #2ecc71;
+  --amber: #f5a623;
+  --red: #e74c3c;
+  --accent: #4ea1ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.app { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+h1 { font-size: 20px; margin: 0; }
+
+/* --- freshness badge --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13px;
+}
+.badge-dot { width: 8px; height: 8px; border-radius: 50%; }
+.badge-fresh .badge-dot { background: var(--green); }
+.badge-stale .badge-dot { background: var(--amber); }
+.badge-down .badge-dot { background: var(--red); }
+.badge-fresh { color: var(--green); }
+.badge-stale { color: var(--amber); }
+.badge-down { color: var(--red); }
+.badge-age { color: var(--text-dim); }
+
+/* --- table --- */
+.coin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.coin-table th, .coin-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+.coin-table th { color: var(--text-dim); font-weight: 500; font-size: 13px; }
+.coin-table tbody tr { cursor: pointer; }
+.coin-table tbody tr:hover { background: rgba(78, 161, 255, 0.06); }
+.coin-table tbody tr.selected { background: rgba(78, 161, 255, 0.12); }
+.coin-table tbody tr:last-child td { border-bottom: none; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.rank { color: var(--text-dim); }
+.coin-name { display: flex; align-items: center; gap: 10px; }
+.coin-name img { border-radius: 50%; }
+.symbol { color: var(--text-dim); font-size: 12px; }
+.up { color: var(--green); }
+.down { color: var(--red); }
+.cap { color: var(--text-dim); }
+
+/* --- states --- */
+.state {
+  padding: 48px 16px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.state-error { border-color: var(--red); }
+.hint { color: var(--text-dim); font-size: 13px; }
+
+.skeleton { display: grid; gap: 8px; }
+.skeleton-row {
+  height: 44px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--surface) 25%, #1d242e 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* --- detail panel --- */
+.detail {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.detail-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.detail-head h2 { font-size: 16px; margin: 0; }
+.detail-close {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.detail-close:hover { color: var(--text); }
+.detail-source { color: var(--text-dim); font-size: 12px; margin: 0 0 12px; }
+.sparkline { width: 100%; height: 120px; }
+.sparkline polyline { fill: none; stroke: var(--accent); stroke-width: 2; }
+.detail-range { display: flex; justify-content: space-between; color: var(--text-dim); font-size: 12px; }
+
+.footer { margin-top: 24px; color: var(--text-dim); font-size: 12px; text-align: center; }
