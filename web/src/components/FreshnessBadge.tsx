@@ -47,7 +47,9 @@ export function FreshnessBadge({ meta, receivedAt, reconnecting }: Props) {
 
   return (
     <div className={`badge badge-${level}`} role="status">
-      <span className="badge-dot" aria-hidden />
+      {/* Keyed by receivedAt so the dot remounts — and its pulse animation
+          replays — on every successful refresh. */}
+      <span className="badge-dot" key={receivedAt} aria-hidden />
       <span>{label}</span>
       {liveAgeMs !== null && level !== 'fresh' && (
         <span className="badge-age">({formatAge(liveAgeMs)})</span>

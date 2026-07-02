@@ -45,7 +45,38 @@ h1 { font-size: 20px; margin: 0; }
   background: var(--surface);
   font-size: 13px;
 }
-.badge-dot { width: 8px; height: 8px; border-radius: 50%; }
+.badge-dot { width: 8px; height: 8px; border-radius: 50%; animation: dot-pulse 0.9s ease-out; }
+@keyframes dot-pulse {
+  0% { transform: scale(1.7); opacity: 0.55; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- live pill --- */
+.header-status { display: flex; align-items: center; gap: 8px; }
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid rgba(46, 204, 113, 0.35);
+  border-radius: 999px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: live-pulse 2s ease-in-out infinite;
+}
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
 .badge-fresh .badge-dot { background: var(--green); }
 .badge-stale .badge-dot { background: var(--amber); }
 .badge-down .badge-dot { background: var(--red); }
@@ -53,6 +84,30 @@ h1 { font-size: 20px; margin: 0; }
 .badge-stale { color: var(--amber); }
 .badge-down { color: var(--red); }
 .badge-age { color: var(--text-dim); }
+
+/* --- toolbar (filter) --- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.filter-input {
+  flex: 1;
+  max-width: 320px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+.filter-input::placeholder { color: var(--text-dim); }
+.filter-input:focus { outline: none; border-color: var(--accent); }
+.toolbar-count { color: var(--text-dim); font-size: 12px; white-space: nowrap; }
 
 /* --- table --- */
 .coin-table {
@@ -69,11 +124,64 @@ h1 { font-size: 20px; margin: 0; }
   text-align: left;
   white-space: nowrap;
 }
-.coin-table th { color: var(--text-dim); font-weight: 500; font-size: 13px; }
-.coin-table tbody tr { cursor: pointer; }
+.coin-table th { color: var(--text-dim); font-weight: 500; font-size: 13px; padding: 4px 8px; }
+
+/* Sortable headers: real buttons, so Enter/Space and focus rings come free. */
+.sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.sort-btn:hover, .sort-btn.active { color: var(--text); }
+.caret {
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.2s ease;
+}
+.sort-btn:hover .caret { opacity: 0.4; }
+.caret.asc { opacity: 1; transform: rotate(180deg); }
+.caret.desc { opacity: 1; transform: rotate(0deg); }
+
+.coin-table tbody tr {
+  cursor: pointer;
+  animation: row-in 0.3s ease-out;
+  transition: background-color 0.15s ease;
+}
 .coin-table tbody tr:hover { background: rgba(78, 161, 255, 0.06); }
 .coin-table tbody tr.selected { background: rgba(78, 161, 255, 0.12); }
 .coin-table tbody tr:last-child td { border-bottom: none; }
+@keyframes row-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Live price-change cue: flash the cells (not the row, whose own `animation`
+   is the entry fade) and let it ease back to transparent. */
+.coin-table tbody tr.flash-up td { animation: flash-up 0.7s ease-out; }
+.coin-table tbody tr.flash-down td { animation: flash-down 0.7s ease-out; }
+@keyframes flash-up {
+  from { background-color: rgba(46, 204, 113, 0.16); }
+  to { background-color: transparent; }
+}
+@keyframes flash-down {
+  from { background-color: rgba(231, 76, 60, 0.16); }
+  to { background-color: transparent; }
+}
+
+.coin-table tbody tr.empty-row { cursor: default; }
+.coin-table tbody tr.empty-row:hover { background: none; }
+.coin-table tbody tr.empty-row td {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 32px 14px;
+}
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .rank { color: var(--text-dim); }
 .coin-name { display: flex; align-items: center; gap: 10px; }
@@ -133,3 +241,11 @@ h1 { font-size: 20px; margin: 0; }
 .detail-range { display: flex; justify-content: space-between; color: var(--text-dim); font-size: 12px; }
 
 .footer { margin-top: 24px; color: var(--text-dim); font-size: 12px; text-align: center; }
+
+/* --- motion opt-out: everything above is decorative, so kill it wholesale --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

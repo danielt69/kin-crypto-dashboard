@@ -1,23 +1,38 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useMarketStream } from './hooks/useMarketStream';
 import { CoinTable } from './components/CoinTable';
 import { FreshnessBadge } from './components/FreshnessBadge';
 import { HistoryPanel } from './components/HistoryPanel';
+import { filterCoins } from './table';
 
 export function App() {
   const { snapshot, status, receivedAt } = useMarketStream();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+
+  const filtered = useMemo(
+    () => (snapshot ? filterCoins(snapshot.data, query) : []),
+    [snapshot, query]
+  );
 
   return (
     <div className="app">
       <header className="header">
         <h1>Crypto Market Dashboard</h1>
         {snapshot && receivedAt !== null && (
-          <FreshnessBadge
-            meta={snapshot.meta}
-            receivedAt={receivedAt}
-            reconnecting={status === 'reconnecting'}
-          />
+          <div className="header-status">
+            {status === 'open' && !snapshot.meta.degraded && (
+              <span className="live-pill">
+                <span className="live-dot" aria-hidden />
+                live
+              </span>
+            )}
+            <FreshnessBadge
+              meta={snapshot.meta}
+              receivedAt={receivedAt}
+              reconnecting={status === 'reconnecting'}
+            />
+          </div>
         )}
       </header>
 
@@ -54,8 +69,21 @@ export function App() {
     }
     return (
       <>
+        <div className="toolbar">
+          <input
+            type="search"
+            className="filter-input"
+            placeholder="Filter by name or symbol…"
+            aria-label="Filter coins by name or symbol"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <span className="toolbar-count" role="status">
+            showing {filtered.length} of {snapshot.data.length}
+          </span>
+        </div>
         <CoinTable
-          coins={snapshot.data}
+          coins={filtered}
           selectedId={selectedId}
           onSelect={(id) => setSelectedId(id === selectedId ? null : id)}
         />

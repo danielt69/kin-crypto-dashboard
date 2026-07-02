@@ -2,7 +2,8 @@
 
 A three-tier app that shows the top-20 cryptocurrencies live: **React + Vite** frontend,
 **Fastify (Node + TypeScript)** API, **PostgreSQL** storage, fed by CoinGecko and streamed
-to the browser over **Server-Sent Events**.
+to the browser over **Server-Sent Events**. The table sorts and filters client-side and
+flashes rows on live price ticks — all derived from the one SSE snapshot, no extra API calls.
 
 The design goal: **upstream cost is O(1) in users, and the app degrades to
 "stale but up", never "down".** The browser never talks to CoinGecko — one background
