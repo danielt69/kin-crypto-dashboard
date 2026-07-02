@@ -12,7 +12,7 @@
   "scripts": {
     "build": "npm run build -w @kin/types && npm run build -w @kin/server && npm run build -w @kin/web",
     "typecheck": "npm run build -w @kin/types && npm run typecheck -w @kin/server && npm run typecheck -w @kin/web",
-    "test": "npm run build -w @kin/types && npm run test -w @kin/server",
+    "test": "npm run build -w @kin/types && npm run test -w @kin/server && npm run test -w @kin/web",
     "lint": "eslint .",
     "dev:server": "npm run build -w @kin/types && npm run dev -w @kin/server",
     "dev:web": "npm run dev -w @kin/web"
