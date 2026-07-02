@@ -142,8 +142,6 @@ h1 { font-size: 20px; margin: 0; }
   cursor: pointer;
   transition: color 0.15s ease;
 }
-/* Numeric headers right-align their label above the right-aligned values. */
-.coin-table th.num .sort-btn { display: flex; width: 100%; justify-content: flex-end; }
 .sort-btn:hover, .sort-btn.active { color: var(--text); }
 .caret {
   font-size: 10px;
@@ -187,7 +185,9 @@ h1 { font-size: 20px; margin: 0; }
   color: var(--text-dim);
   padding: 32px 14px;
 }
-.num { text-align: right; font-variant-numeric: tabular-nums; }
+/* All columns start-aligned (left in LTR) for one consistent edge; tabular
+   figures keep the digits themselves vertically aligned. */
+.num { text-align: left; font-variant-numeric: tabular-nums; }
 .rank { color: var(--text-dim); }
 .coin-name { display: flex; align-items: center; gap: 10px; }
 .coin-name img { border-radius: 50%; }
