@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@kin/types": "*",
-    "fastify": "^5.2.1",
+    "fastify": "^5.12.5",
     "pg": "^8.13.1"
   },
   "devDependencies": {
